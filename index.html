@@ -3,278 +3,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liga Manager — Gestión de Ligas Deportivas</title>
+<title>Liga Manager ⚽</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --pitch:#0a3d1f;
-  --pitch-mid:#0f5c2e;
-  --verde:#00e676;
-  --verde-glow:rgba(0,230,118,.25);
-  --blanco:#f5f9f5;
-  --gris:#8a9e8a;
-  --tarjeta:rgba(255,255,255,.06);
-  --borde:rgba(255,255,255,.1);
+  --bg:#071a0e;--surface:#0f2918;--surface2:#162e1c;
+  --verde:#00e676;--verde-glow:rgba(0,230,118,.2);
+  --rojo:#ff5252;--amarillo:#ffd740;
+  --txt:#e8f5e9;--txt2:#6b9e6b;--borde:rgba(255,255,255,.09);
+  --radius:14px;
 }
-html,body{height:100%;overflow-x:hidden}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--pitch);
-  color:var(--blanco);
-  min-height:100vh;
-}
+html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 
-/* ── FONDO CANCHA ── */
-.field-bg{
-  position:fixed;inset:0;z-index:0;
-  background:
-    linear-gradient(180deg,#071a0e 0%,#0a3d1f 40%,#0d4f28 100%);
-  overflow:hidden;
-}
-.field-lines{
-  position:absolute;inset:0;
-  background-image:
-    /* líneas horizontales tenues */
-    repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.03) 79px,rgba(255,255,255,.03) 80px),
-    /* círculo central */
-    radial-gradient(circle 120px at 50% 55%,transparent 118px,rgba(255,255,255,.06) 120px,transparent 122px),
-    /* punto central */
-    radial-gradient(circle 4px at 50% 55%,rgba(255,255,255,.15) 100%,transparent 100%);
-}
-.field-vignette{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 40%,rgba(7,26,14,.9) 100%);
-}
+/* ════════════════════════════════
+   LANDING
+════════════════════════════════ */
+#landing{min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.field-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 120% 80% at 50% 60%,#0d3d1f 0%,#071a0e 70%)}
+.field-lines{position:absolute;inset:0;background-image:
+  repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.025) 79px,rgba(255,255,255,.025) 80px),
+  radial-gradient(circle 130px at 50% 58%,transparent 128px,rgba(255,255,255,.05) 130px,transparent 132px),
+  radial-gradient(circle 5px at 50% 58%,rgba(255,255,255,.2) 100%,transparent);
+  pointer-events:none}
+.field-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 35%,rgba(7,26,14,.92) 100%);pointer-events:none}
 
-/* ── WRAPPER ── */
-.page{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+/* TOPBAR */
+.topbar{position:relative;z-index:10;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borde)}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-box{width:36px;height:36px;background:var(--verde);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0}
+.logo-title{font-family:'Bebas Neue',sans-serif;font-size:1.45em;letter-spacing:.06em}
+.topbar-btns{display:flex;gap:8px}
+.btn-top{padding:8px 18px;border-radius:9px;border:1px solid var(--borde);background:transparent;color:var(--txt);font-size:.87em;cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-top:hover{border-color:var(--verde);background:rgba(0,230,118,.07)}
+.btn-top.cta{background:var(--verde);color:#071a0e;border-color:var(--verde);font-weight:700}
+.btn-top.cta:hover{background:#00ff88;box-shadow:0 0 24px var(--verde-glow)}
 
-/* ── HEADER ── */
-.topbar{
-  padding:20px 32px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid var(--borde);
-  backdrop-filter:blur(8px);
-}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-icon{
-  width:38px;height:38px;
-  background:var(--verde);
-  border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.2em;
-}
-.logo-text{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.5em;letter-spacing:.06em;
-  color:var(--blanco);
-}
-.topbar-nav{display:flex;gap:8px}
-.btn-nav{
-  padding:8px 18px;border-radius:8px;border:1px solid var(--borde);
-  background:transparent;color:var(--blanco);font-size:.88em;
-  cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;
-  text-decoration:none;display:inline-flex;align-items:center;
-}
-.btn-nav:hover{background:var(--tarjeta);border-color:var(--verde)}
-.btn-nav.solid{background:var(--verde);color:#071a0e;border-color:var(--verde);font-weight:700}
-.btn-nav.solid:hover{background:#00ff88;box-shadow:0 0 20px var(--verde-glow)}
+/* HERO */
+.hero{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px 40px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.28);color:var(--verde);padding:5px 16px;border-radius:100px;font-size:.78em;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:26px;animation:fd .6s ease both}
+.dot-live{width:6px;height:6px;background:var(--verde);border-radius:50%;animation:pl 2s infinite}
+@keyframes pl{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.8em,11vw,7.5em);line-height:.88;letter-spacing:.02em;margin-bottom:16px;animation:fd .7s ease .1s both}
+.hero h1 em{color:var(--verde);font-style:normal}
+.hero p{font-size:clamp(.95em,2.5vw,1.15em);color:var(--txt2);max-width:500px;line-height:1.65;margin-bottom:34px;animation:fd .7s ease .2s both}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:fd .7s ease .3s both}
+.btn-hero{padding:14px 30px;border-radius:12px;font-size:.97em;font-weight:700;cursor:pointer;border:none;transition:.25s;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-hero.p{background:var(--verde);color:#071a0e;box-shadow:0 4px 24px var(--verde-glow)}
+.btn-hero.p:hover{background:#00ff88;transform:translateY(-2px);box-shadow:0 8px 32px var(--verde-glow)}
+.btn-hero.s{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--borde)}
+.btn-hero.s:hover{border-color:var(--verde);transform:translateY(-2px)}
+@keyframes fd{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
 
-/* ── HERO ── */
-.hero{
-  flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;padding:60px 24px 40px;
-}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.3);
-  color:var(--verde);padding:6px 16px;border-radius:100px;
-  font-size:.8em;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  margin-bottom:28px;
-  animation:fadeDown .6s ease both;
-}
-.hero-badge::before{content:'';width:6px;height:6px;background:var(--verde);border-radius:50%;animation:puls 2s infinite}
-@keyframes puls{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+/* PILLARS */
+.pillars{position:relative;z-index:5;display:flex;gap:32px;margin-top:50px;padding-top:32px;border-top:1px solid var(--borde);flex-wrap:wrap;justify-content:center;animation:fd .7s ease .4s both}
+.pillar{text-align:center}
+.pv{font-family:'Bebas Neue',sans-serif;font-size:2.6em;color:var(--verde);line-height:1}
+.pl{font-size:.75em;color:var(--txt2);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
 
-.hero h1{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(3.5em,10vw,7em);
-  line-height:.9;letter-spacing:.02em;
-  margin-bottom:12px;
-  animation:fadeDown .7s ease .1s both;
-}
-.hero h1 span{color:var(--verde)}
-.hero p{
-  font-size:clamp(1em,2.5vw,1.2em);color:var(--gris);
-  max-width:520px;line-height:1.65;margin-bottom:36px;
-  animation:fadeDown .7s ease .2s both;
-}
-.hero-ctas{
-  display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
-  animation:fadeDown .7s ease .3s both;
-}
-.btn-hero{
-  padding:14px 32px;border-radius:12px;font-size:1em;font-weight:700;
-  cursor:pointer;border:none;transition:.25s;font-family:'DM Sans',sans-serif;
-  text-decoration:none;display:inline-flex;align-items:center;gap:8px;
-}
-.btn-hero.primary{
-  background:var(--verde);color:#071a0e;
-  box-shadow:0 4px 24px var(--verde-glow);
-}
-.btn-hero.primary:hover{background:#00ff88;transform:translateY(-2px);box-shadow:0 8px 32px var(--verde-glow)}
-.btn-hero.secondary{
-  background:var(--tarjeta);color:var(--blanco);
-  border:1px solid var(--borde);
-}
-.btn-hero.secondary:hover{border-color:var(--verde);transform:translateY(-2px)}
+/* FEATURES */
+.features{position:relative;z-index:5;padding:64px 28px;max-width:1080px;margin:0 auto;width:100%}
+.sec-label{font-size:.75em;color:var(--verde);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:10px}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2em,5vw,3em);letter-spacing:.03em;margin-bottom:36px}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.feat{background:rgba(255,255,255,.04);border:1px solid var(--borde);border-radius:var(--radius);padding:22px;transition:.3s;cursor:default}
+.feat:hover{border-color:rgba(0,230,118,.3);background:rgba(0,230,118,.04);transform:translateY(-3px)}
+.feat-ico{font-size:1.9em;margin-bottom:12px}
+.feat h3{font-size:.97em;font-weight:700;margin-bottom:7px}
+.feat p{font-size:.83em;color:var(--txt2);line-height:1.55}
 
-@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+/* PLANES */
+.planes{position:relative;z-index:5;padding:0 28px 70px;max-width:1080px;margin:0 auto;width:100%}
+.planes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px;margin-top:14px}
+.plan{background:rgba(255,255,255,.04);border:1px solid var(--borde);border-radius:18px;padding:26px;position:relative;overflow:hidden;transition:.3s}
+.plan:hover{transform:translateY(-3px)}
+.plan.pop{border-color:var(--verde);background:rgba(0,230,118,.05)}
+.pop-tag{position:absolute;top:14px;right:-30px;background:var(--verde);color:#071a0e;font-size:.64em;font-weight:800;letter-spacing:.07em;padding:4px 38px;transform:rotate(45deg)}
+.plan-name{font-family:'Bebas Neue',sans-serif;font-size:1.55em;letter-spacing:.05em;margin-bottom:3px}
+.plan-price{font-family:'Bebas Neue',sans-serif;font-size:2.9em;line-height:1;color:var(--verde)}
+.plan-price span{font-size:.38em;color:var(--txt2)}
+.plan-feats{list-style:none;margin:18px 0;display:flex;flex-direction:column;gap:7px}
+.plan-feats li{font-size:.86em;display:flex;align-items:center;gap:7px}
+.plan-feats li.ok{color:var(--txt)}
+.plan-feats li.no{color:var(--txt2);opacity:.4}
+.plan-feats li.ok::before{content:'✓';color:var(--verde);font-weight:700}
+.plan-feats li.no::before{content:'✗';color:var(--txt2)}
+.btn-plan{width:100%;padding:11px;border-radius:10px;border:1px solid var(--borde);background:transparent;color:var(--txt);font-size:.88em;font-weight:700;cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif}
+.plan.pop .btn-plan{background:var(--verde);color:#071a0e;border-color:var(--verde)}
+.btn-plan:hover{opacity:.82;transform:translateY(-1px)}
 
-/* ── STATS ── */
-.hero-stats{
-  display:flex;gap:40px;margin-top:52px;
-  border-top:1px solid var(--borde);padding-top:32px;
-  animation:fadeDown .7s ease .4s both;
-  flex-wrap:wrap;justify-content:center;
-}
-.stat-item{text-align:center}
-.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2.4em;color:var(--verde);line-height:1}
-.stat-lbl{font-size:.78em;color:var(--gris);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+/* FOOTER LANDING */
+.land-footer{position:relative;z-index:5;padding:20px 28px;border-top:1px solid var(--borde);text-align:center;font-size:.8em;color:var(--txt2)}
+.land-footer a{color:var(--verde);text-decoration:none}
 
-/* ── FEATURES GRID ── */
-.features-section{
-  padding:60px 32px;
-  max-width:1100px;margin:0 auto;width:100%;
-}
-.section-label{
-  font-size:.78em;color:var(--verde);text-transform:uppercase;
-  letter-spacing:.1em;font-weight:600;margin-bottom:12px;
-}
-.section-title{
-  font-family:'Bebas Neue',sans-serif;font-size:clamp(2em,5vw,3em);
-  letter-spacing:.03em;margin-bottom:40px;
-}
-.features-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;
-}
-.feat-card{
-  background:var(--tarjeta);border:1px solid var(--borde);
-  border-radius:16px;padding:24px;
-  transition:.3s;cursor:default;
-}
-.feat-card:hover{border-color:rgba(0,230,118,.35);transform:translateY(-4px);background:rgba(0,230,118,.05)}
-.feat-icon{font-size:2em;margin-bottom:14px}
-.feat-card h3{font-size:1em;font-weight:700;margin-bottom:8px}
-.feat-card p{font-size:.85em;color:var(--gris);line-height:1.55}
+/* ════════════════════════════════
+   APP
+════════════════════════════════ */
+#app{display:none;flex-direction:column;min-height:100vh;padding-bottom:64px}
+.app-hdr{background:linear-gradient(135deg,#0f3320,#0a1f12);border-bottom:1px solid var(--borde);padding:11px 15px;position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:10px}
+.app-logo{font-family:'Bebas Neue',sans-serif;font-size:1.35em;letter-spacing:.06em;color:var(--verde);flex:1}
+.app-logo small{font-family:'DM Sans',sans-serif;font-size:.42em;letter-spacing:.02em;color:var(--txt2);display:block;margin-top:-3px;font-weight:400}
+.btn-ahdr{background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.22);color:var(--verde);padding:6px 11px;border-radius:8px;font-size:.76em;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:.2s}
+.btn-ahdr:hover{background:rgba(0,230,118,.2)}
+.btn-back{background:rgba(255,255,255,.07);border:1px solid var(--borde);color:var(--txt2);padding:6px 11px;border-radius:8px;font-size:.76em;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s}
+.btn-back:hover{color:var(--txt);border-color:var(--txt2)}
 
-/* ── PLANES ── */
-.planes-section{padding:60px 32px;max-width:1100px;margin:0 auto;width:100%}
-.planes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:16px}
-.plan-card{
-  background:var(--tarjeta);border:1px solid var(--borde);
-  border-radius:20px;padding:28px;position:relative;overflow:hidden;
-  transition:.3s;
-}
-.plan-card.popular{border-color:var(--verde);background:rgba(0,230,118,.06)}
-.plan-card.popular::before{
-  content:'⭐ MÁS POPULAR';
-  position:absolute;top:16px;right:-28px;
-  background:var(--verde);color:#071a0e;
-  font-size:.65em;font-weight:800;letter-spacing:.08em;
-  padding:4px 36px;transform:rotate(45deg);
-}
-.plan-nombre{font-family:'Bebas Neue',sans-serif;font-size:1.6em;letter-spacing:.05em;margin-bottom:4px}
-.plan-precio{font-family:'Bebas Neue',sans-serif;font-size:3em;line-height:1;color:var(--verde)}
-.plan-precio span{font-size:.4em;color:var(--gris)}
-.plan-features{list-style:none;margin:20px 0;display:flex;flex-direction:column;gap:8px}
-.plan-features li{font-size:.88em;display:flex;align-items:center;gap:8px;color:var(--gris)}
-.plan-features li.ok{color:var(--blanco)}
-.plan-features li::before{content:'✓';color:var(--verde);font-weight:700;flex-shrink:0}
-.plan-features li.no{opacity:.4}
-.plan-features li.no::before{content:'✗';color:var(--gris)}
-.btn-plan{
-  width:100%;padding:12px;border-radius:10px;border:1px solid var(--borde);
-  background:transparent;color:var(--blanco);font-size:.9em;font-weight:700;
-  cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;
-}
-.plan-card.popular .btn-plan{
-  background:var(--verde);color:#071a0e;border-color:var(--verde);
-}
-.btn-plan:hover{opacity:.85;transform:translateY(-1px)}
+/* TABS */
+.atabs{display:flex;background:var(--surface);border-bottom:1px solid var(--borde);position:sticky;top:56px;z-index:190;overflow-x:auto;scrollbar-width:none}
+.atabs::-webkit-scrollbar{display:none}
+.atab{flex:1;min-width:62px;padding:10px 3px;text-align:center;background:transparent;border:none;color:var(--txt2);font-size:.74em;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.2s;font-family:'DM Sans',sans-serif}
+.atab.on{color:var(--verde);border-bottom-color:var(--verde);font-weight:700}
+.atab:hover:not(.on){color:var(--txt);background:rgba(255,255,255,.02)}
 
-/* ── FOOTER ── */
-footer{
-  padding:24px 32px;border-top:1px solid var(--borde);
-  text-align:center;font-size:.8em;color:var(--gris);
-}
-footer a{color:var(--verde);text-decoration:none}
+/* CONTENT */
+.acont{padding:15px;max-width:860px;margin:0 auto;width:100%}
+.asec{display:none}
+.asec.on{display:block;animation:up .22s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-@media(max-width:600px){
-  .topbar{padding:14px 16px}
-  .features-section,.planes-section{padding:40px 16px}
-  .hero-stats{gap:24px}
+/* CARD */
+.acard{background:var(--surface);border:1px solid var(--borde);border-radius:var(--radius);padding:15px;margin-bottom:13px}
+.acard-hdr{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:13px;padding-bottom:11px;border-bottom:1px solid var(--borde)}
+.acard-hdr h2{font-family:'Bebas Neue',sans-serif;font-size:1.15em;letter-spacing:.04em}
+.acard-btns{display:flex;gap:6px;flex-wrap:wrap}
+
+/* BTNS APP */
+.btn{padding:7px 13px;border:none;border-radius:9px;font-size:.81em;font-weight:600;cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.btn-v{background:var(--verde);color:#071a0e}
+.btn-r{background:rgba(255,82,82,.12);color:var(--rojo);border:1px solid rgba(255,82,82,.2)}
+.btn-g{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--borde)}
+.btn-o{background:transparent;border:1px solid var(--verde);color:var(--verde)}
+.btn-sm{padding:5px 9px;font-size:.74em}
+
+/* MODALES */
+.amodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
+.amodal.on{display:flex}
+.amodal-box{background:#162e1c;border:1px solid var(--borde);border-radius:20px 20px 0 0;padding:22px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:su .24s ease}
+@keyframes su{from{transform:translateY(28px);opacity:0}to{transform:none;opacity:1}}
+.amodal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.amodal-hdr h3{font-family:'Bebas Neue',sans-serif;font-size:1.25em;letter-spacing:.04em}
+.xcerrar{background:rgba(255,255,255,.09);border:none;color:var(--txt2);width:29px;height:29px;border-radius:50%;cursor:pointer;font-size:1.1em;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.xcerrar:hover{background:rgba(255,82,82,.18);color:var(--rojo)}
+
+/* FORM */
+.fg{margin-bottom:13px}
+.fg label{display:block;margin-bottom:4px;font-weight:600;font-size:.8em;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 13px;background:rgba(255,255,255,.06);border:1px solid var(--borde);border-radius:9px;color:var(--txt);font-size:.93em;font-family:'DM Sans',sans-serif;transition:.2s}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--verde);background:rgba(0,230,118,.04)}
+.fg select option{background:#162e1c}
+
+/* MATCH CARDS */
+.mlist{display:flex;flex-direction:column;gap:9px}
+.mcard{background:var(--surface2);border:1px solid var(--borde);border-radius:12px;padding:13px;border-left:3px solid var(--verde);transition:.2s}
+.mcard.jugado{border-left-color:var(--txt2)}
+.mmeta{display:flex;justify-content:space-between;align-items:center;gap:4px;font-size:.72em;color:var(--txt2);margin-bottom:9px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:20px;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.b-pend{background:rgba(255,215,64,.1);color:var(--amarillo)}
+.b-fin{background:rgba(255,255,255,.07);color:var(--txt2)}
+.b-live{background:rgba(255,82,82,.12);color:var(--rojo)}
+.mteams{display:flex;align-items:center;justify-content:space-between;gap:7px}
+.tside{flex:1;text-align:center;min-width:0}
+.temo{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--borde);display:flex;align-items:center;justify-content:center;font-size:1.2em;margin:0 auto 4px}
+.tname{font-size:.79em;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mscore{font-family:'Bebas Neue',sans-serif;font-size:1.85em;letter-spacing:.03em;color:var(--verde);padding:0 10px;min-width:76px;text-align:center}
+.mcard.jugado .mscore{color:var(--txt2)}
+.macts{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.mgoles-strip{font-size:.7em;color:var(--txt2);margin-top:5px;display:flex;flex-wrap:wrap;gap:4px}
+.mgoles-strip span{background:rgba(255,255,255,.05);padding:2px 7px;border-radius:20px}
+
+/* TABLA */
+.twrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--borde)}
+.ttbl{width:100%;border-collapse:collapse}
+.ttbl thead{background:rgba(0,230,118,.07)}
+.ttbl th{padding:9px 5px;text-align:center;font-size:.67em;color:var(--verde);font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.ttbl th:nth-child(2){text-align:left}
+.ttbl td{padding:9px 5px;border-bottom:1px solid var(--borde);text-align:center;font-size:.81em;vertical-align:middle;white-space:nowrap}
+.ttbl td:nth-child(2){text-align:left}
+.ttbl tr:last-child td{border-bottom:none}
+.ttbl tr:hover td{background:rgba(255,255,255,.02)}
+.posn{font-family:'Bebas Neue',sans-serif;font-size:1.1em;color:var(--verde)}
+.pos1{color:#ffd740}.pos2{color:#b0bec5}.pos3{color:#a1887f}
+.dgp{color:#00e676;font-weight:700}.dgn{color:#ff5252;font-weight:700}.dg0{color:var(--txt2)}
+.ptsb{font-family:'Bebas Neue',sans-serif;font-size:1.15em;color:var(--verde)}
+
+/* EQUIPO CARDS */
+.ecard{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;background:var(--surface2);border:1px solid var(--borde);border-radius:12px;margin-bottom:9px;transition:.2s;flex-wrap:wrap}
+.ecard:hover{border-color:rgba(0,230,118,.18)}
+.eleft{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+.eemo{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--borde);display:flex;align-items:center;justify-content:center;font-size:1.35em;flex-shrink:0}
+.ename{font-weight:700;font-size:.96em}
+.estats{color:var(--txt2);font-size:.77em;margin-top:2px}
+.eacts{display:flex;gap:5px;flex-wrap:wrap}
+
+/* STATS */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:9px;margin-bottom:18px}
+.scard{background:linear-gradient(135deg,var(--surface2),rgba(0,230,118,.07));border:1px solid rgba(0,230,118,.12);border-radius:12px;padding:13px;text-align:center}
+.sv{font-family:'Bebas Neue',sans-serif;font-size:1.9em;color:var(--verde);line-height:1}
+.sl{font-size:.7em;color:var(--txt2);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* GOLEADORES */
+.grow{display:flex;align-items:center;gap:11px;padding:11px;background:var(--surface2);border:1px solid var(--borde);border-radius:12px;margin-bottom:8px;transition:.2s}
+.grow:hover{border-color:rgba(0,230,118,.18)}
+.gpos{font-family:'Bebas Neue',sans-serif;font-size:1.35em;width:30px;text-align:center;flex-shrink:0}
+.ginfo{flex:1;min-width:0}
+.gnom{font-weight:700;font-size:.93em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.geq{font-size:.76em;color:var(--txt2);margin-top:1px}
+.gcnt{font-family:'Bebas Neue',sans-serif;font-size:1.7em;color:var(--verde);display:flex;align-items:center;gap:4px;flex-shrink:0}
+.gcnt span{font-size:.4em;color:var(--txt2);font-family:'DM Sans',sans-serif}
+
+/* SCORE INPUT */
+.sinput{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0}
+.sside{text-align:center}
+.sside label{display:block;font-size:.78em;font-weight:600;color:var(--txt2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.sside input{width:68px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:2.3em;background:rgba(255,255,255,.06);border:2px solid var(--borde);border-radius:9px;color:var(--verde);padding:5px}
+.sside input:focus{outline:none;border-color:var(--verde);background:rgba(0,230,118,.04)}
+.svs{font-family:'Bebas Neue',sans-serif;font-size:1.5em;color:var(--txt2)}
+
+/* EMPTY */
+.empty{text-align:center;padding:44px 14px;color:var(--txt2)}
+.empty-i{font-size:3.2em;opacity:.3;margin-bottom:11px}
+.empty h3{font-size:.97em;font-weight:600;margin-bottom:5px;color:var(--txt)}
+.empty p{font-size:.83em;line-height:1.5}
+
+/* JORNADA */
+.jlabel{font-family:'Bebas Neue',sans-serif;font-size:.82em;letter-spacing:.08em;color:var(--verde);text-transform:uppercase;padding:7px 0 5px;border-bottom:1px solid var(--borde);margin-bottom:9px;margin-top:14px}
+.jlabel:first-child{margin-top:0}
+
+/* PLAN TAG */
+.ptag{display:inline-flex;align-items:center;gap:4px;background:rgba(255,215,64,.09);border:1px solid rgba(255,215,64,.22);color:var(--amarillo);padding:2px 9px;border-radius:20px;font-size:.68em;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
+/* EMOJI GRID */
+.egrid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-top:4px}
+.egrid button{background:rgba(255,255,255,.06);border:1px solid var(--borde);border-radius:7px;padding:6px;font-size:1.1em;cursor:pointer;transition:.2s}
+.egrid button:hover{background:rgba(0,230,118,.15);border-color:var(--verde)}
+
+/* TOAST */
+#toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--verde);color:#071a0e;font-weight:700;padding:9px 20px;border-radius:100px;font-size:.86em;opacity:0;transition:.28s;pointer-events:none;z-index:9999;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--rojo);color:#fff}
+
+/* FAB */
+.fab{position:fixed;bottom:70px;right:14px;width:50px;height:50px;border-radius:50%;background:var(--verde);color:#071a0e;border:none;font-size:1.5em;cursor:pointer;box-shadow:0 4px 18px rgba(0,230,118,.38);z-index:180;transition:.25s}
+.fab:hover{transform:scale(1.1) rotate(12deg)}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,26,14,.96);border-top:1px solid var(--borde);display:flex;z-index:200;height:62px;backdrop-filter:blur(12px)}
+.bbt{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--txt2);font-size:.61em;cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif}
+.bbt .ico{font-size:1.45em;line-height:1}
+.bbt.on{color:var(--verde)}
+.bbt:hover:not(.on){color:var(--txt)}
+
+@media(max-width:420px){
+  .topbar{padding:12px 14px}
+  .features,.planes{padding-left:14px;padding-right:14px}
+  .mscore{font-size:1.5em}
+  .ttbl th,.ttbl td{font-size:.63em;padding:7px 3px}
 }
 </style>
 </head>
 <body>
-<div class="field-bg"><div class="field-lines"></div><div class="field-vignette"></div></div>
-<div class="page">
 
-  <!-- TOPBAR -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════════════════════
+     LANDING
+═══════════════════════════════════════ -->
+<div id="landing">
+  <div class="field-bg"><div class="field-lines"></div><div class="field-vignette"></div></div>
+
   <header class="topbar">
-    <div class="logo">
-      <div class="logo-icon">⚽</div>
-      <span class="logo-text">Liga Manager</span>
+    <div class="logo-wrap">
+      <div class="logo-box">⚽</div>
+      <span class="logo-title">Liga Manager</span>
     </div>
-    <nav class="topbar-nav">
-      <a href="#planes" class="btn-nav">Planes</a>
-      <a href="pages/app.html" class="btn-nav solid">Abrir App →</a>
-    </nav>
+    <div class="topbar-btns">
+      <a href="#planes" class="btn-top">Planes</a>
+      <button class="btn-top cta" onclick="mostrarApp()">Abrir App →</button>
+    </div>
   </header>
 
-  <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge"><span></span>Prototipo v1.0 — Free & Open Source</div>
-    <h1>GESTIONA<br>TU <span>LIGA</span></h1>
-    <p>Equipos, calendarios, tabla de posiciones, goleadores y estadísticas — todo en una sola app. Sin papeles, sin confusiones.</p>
+    <div class="hero-badge"><span class="dot-live"></span>Prototipo v1 · Free & Open Source</div>
+    <h1>GESTIONA<br>TU <em>LIGA</em></h1>
+    <p>Equipos, calendario, tabla de posiciones, goleadores y estadísticas — sin papeles, sin confusiones.</p>
     <div class="hero-ctas">
-      <a href="pages/app.html" class="btn-hero primary">⚽ Probar Demo Gratis</a>
-      <a href="https://github.com" target="_blank" class="btn-hero secondary">⭐ Ver en GitHub</a>
+      <button class="btn-hero p" onclick="mostrarApp()">⚽ Probar Demo Gratis</button>
+      <a href="https://github.com/skynetmatrix-coder/liga-manager-v1" target="_blank" class="btn-hero s">⭐ Ver en GitHub</a>
     </div>
-    <div class="hero-stats">
-      <div class="stat-item"><div class="stat-val">∞</div><div class="stat-lbl">Torneos</div></div>
-      <div class="stat-item"><div class="stat-val">100%</div><div class="stat-lbl">Gratuito</div></div>
-      <div class="stat-item"><div class="stat-val">0</div><div class="stat-lbl">Instalación</div></div>
-      <div class="stat-item"><div class="stat-val">PWA</div><div class="stat-lbl">Instalable</div></div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="features-section">
-    <div class="section-label">¿Qué incluye?</div>
-    <div class="section-title">TODO LO QUE NECESITAS</div>
-    <div class="features-grid">
-      <div class="feat-card"><div class="feat-icon">🏆</div><h3>Tabla de Posiciones</h3><p>Actualización automática de puntos, diferencia de goles y ranking en tiempo real.</p></div>
-      <div class="feat-card"><div class="feat-icon">📅</div><h3>Calendario de Partidos</h3><p>Programa jornadas, registra horarios y estadios. Comparte el fixture en un toque.</p></div>
-      <div class="feat-card"><div class="feat-icon">⚽</div><h3>Goleadores</h3><p>Registra goles por jugador, penales y autogoles. Rankings automáticos.</p></div>
-      <div class="feat-card"><div class="feat-icon">📊</div><h3>Estadísticas Avanzadas</h3><p>Gráficas de rendimiento, comparativas entre equipos y resumen exportable.</p></div>
-      <div class="feat-card"><div class="feat-icon">🖼️</div><h3>Compartir Resultados</h3><p>Genera imágenes para redes sociales con la tabla o el resultado del partido.</p></div>
-      <div class="feat-card"><div class="feat-icon">📲</div><h3>Instálala como App</h3><p>PWA instalable en iOS y Android directamente desde el navegador. Sin app store.</p></div>
+    <div class="pillars">
+      <div class="pillar"><div class="pv">∞</div><div class="pl">Torneos</div></div>
+      <div class="pillar"><div class="pv">100%</div><div class="pl">Gratuito</div></div>
+      <div class="pillar"><div class="pv">0</div><div class="pl">Instalación</div></div>
+      <div class="pillar"><div class="pv">PWA</div><div class="pl">Instalable</div></div>
     </div>
   </section>
 
-  <!-- PLANES -->
-  <section class="planes-section" id="planes">
-    <div class="section-label">Precios</div>
-    <div class="section-title">ELIGE TU PLAN</div>
+  <section class="features">
+    <div class="sec-label">¿Qué incluye?</div>
+    <div class="sec-title">TODO LO QUE NECESITAS</div>
+    <div class="feat-grid">
+      <div class="feat"><div class="feat-ico">🏆</div><h3>Tabla de Posiciones</h3><p>Puntos, diferencia de goles y ranking actualizados automáticamente con cada resultado.</p></div>
+      <div class="feat"><div class="feat-ico">📅</div><h3>Calendario de Partidos</h3><p>Programa jornadas, registra horarios y estadios. Comparte el fixture al instante.</p></div>
+      <div class="feat"><div class="feat-ico">⚽</div><h3>Goleadores</h3><p>Registra goles normales, penales y autogoles. Rankings automáticos con minutos.</p></div>
+      <div class="feat"><div class="feat-ico">📊</div><h3>Estadísticas</h3><p>Gráficas de rendimiento, comparativas entre equipos y resumen exportable.</p></div>
+      <div class="feat"><div class="feat-ico">🖼️</div><h3>Compartir Resultados</h3><p>Copia y comparte la tabla o resultados en un toque para redes sociales.</p></div>
+      <div class="feat"><div class="feat-ico">📲</div><h3>App Instalable</h3><p>PWA instalable en iOS y Android directamente desde el navegador. Sin app store.</p></div>
+    </div>
+  </section>
+
+  <section class="planes" id="planes">
+    <div class="sec-label">Precios</div>
+    <div class="sec-title">ELIGE TU PLAN</div>
     <div class="planes-grid">
-      <div class="plan-card">
-        <div class="plan-nombre">Free</div>
-        <div class="plan-precio">$0<span>/mes</span></div>
-        <ul class="plan-features">
+      <div class="plan">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0<span>/mes</span></div>
+        <ul class="plan-feats">
           <li class="ok">1 torneo activo</li>
           <li class="ok">Hasta 8 equipos</li>
           <li class="ok">Tabla de posiciones</li>
@@ -283,12 +329,13 @@ footer a{color:var(--verde);text-decoration:none}
           <li class="no">Notificaciones push</li>
           <li class="no">Exportar imágenes</li>
         </ul>
-        <button class="btn-plan" onclick="window.location='pages/app.html'">Empezar gratis</button>
+        <button class="btn-plan" onclick="mostrarApp()">Empezar gratis</button>
       </div>
-      <div class="plan-card popular">
-        <div class="plan-nombre">Pro</div>
-        <div class="plan-precio">$4.99<span>/mes</span></div>
-        <ul class="plan-features">
+      <div class="plan pop">
+        <div class="pop-tag">POPULAR</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$4.99<span>/mes</span></div>
+        <ul class="plan-feats">
           <li class="ok">5 torneos activos</li>
           <li class="ok">Hasta 20 equipos</li>
           <li class="ok">Tabla de posiciones</li>
@@ -297,12 +344,12 @@ footer a{color:var(--verde);text-decoration:none}
           <li class="ok">Notificaciones push</li>
           <li class="ok">Exportar imágenes</li>
         </ul>
-        <button class="btn-plan" onclick="alert('¡Próximamente! El pago estará disponible en la versión con backend.')">Activar Pro</button>
+        <button class="btn-plan" onclick="toast2('🔜 Próximamente con backend real')">Activar Pro</button>
       </div>
-      <div class="plan-card">
-        <div class="plan-nombre">Elite</div>
-        <div class="plan-precio">$12.99<span>/mes</span></div>
-        <ul class="plan-features">
+      <div class="plan">
+        <div class="plan-name">Elite</div>
+        <div class="plan-price">$12.99<span>/mes</span></div>
+        <ul class="plan-feats">
           <li class="ok">Torneos ilimitados</li>
           <li class="ok">Equipos ilimitados</li>
           <li class="ok">Todo lo de Pro</li>
@@ -311,14 +358,673 @@ footer a{color:var(--verde);text-decoration:none}
           <li class="ok">Soporte prioritario</li>
           <li class="ok">API acceso (próximo)</li>
         </ul>
-        <button class="btn-plan" onclick="alert('¡Próximamente! El pago estará disponible en la versión con backend.')">Activar Elite</button>
+        <button class="btn-plan" onclick="toast2('🔜 Próximamente con backend real')">Activar Elite</button>
       </div>
     </div>
   </section>
 
-  <footer>
-    <p>Liga Manager &copy; 2026 — Prototipo Open Source &nbsp;|&nbsp; <a href="https://github.com" target="_blank">GitHub</a> &nbsp;|&nbsp; Hecho con ⚽ para comunidades deportivas</p>
+  <footer class="land-footer">
+    Liga Manager &copy; 2026 · Open Source ·
+    <a href="https://github.com/skynetmatrix-coder/liga-manager-v1" target="_blank">GitHub</a>
   </footer>
 </div>
+
+<!-- ═══════════════════════════════════════
+     APP
+═══════════════════════════════════════ -->
+<div id="app">
+
+  <header class="app-hdr">
+    <div class="app-logo">
+      ⚽ LIGA MANAGER
+      <small id="hdrSub">Cargando…</small>
+    </div>
+    <button class="btn-back" onclick="mostrarLanding()">← Inicio</button>
+    <button class="btn-ahdr" onclick="abrirM('mTorneo')">✏️ Torneo</button>
+  </header>
+
+  <div class="atabs">
+    <button class="atab on"  onclick="atab('sinicio',this)">🏠 Inicio</button>
+    <button class="atab"     onclick="atab('sequipos',this)">👥 Equipos</button>
+    <button class="atab"     onclick="atab('scalendario',this)">📅 Partidos</button>
+    <button class="atab"     onclick="atab('stabla',this)">🏆 Tabla</button>
+    <button class="atab"     onclick="atab('sgoles',this)">⚽ Goles</button>
+    <button class="atab"     onclick="atab('sstats',this)">📊 Stats</button>
+  </div>
+
+  <div class="acont">
+
+    <!-- INICIO -->
+    <div id="sinicio" class="asec on">
+      <div class="acard" style="text-align:center;padding:28px 16px 20px">
+        <div style="font-size:3em;margin-bottom:10px">⚽</div>
+        <h2 id="wTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.7em;letter-spacing:.04em;color:var(--verde);margin-bottom:7px">MI LIGA</h2>
+        <p style="color:var(--txt2);font-size:.88em;line-height:1.6;max-width:360px;margin:0 auto 18px">Gestiona equipos, partidos, tabla y goleadores desde aquí.</p>
+        <button class="btn btn-v" style="padding:11px 26px;font-size:.93em" onclick="atab('sequipos',document.querySelectorAll('.atab')[1])">Ir a Equipos →</button>
+      </div>
+      <div id="rInicio"></div>
+    </div>
+
+    <!-- EQUIPOS -->
+    <div id="sequipos" class="asec">
+      <div class="acard">
+        <div class="acard-hdr"><h2>Equipos</h2><button class="btn btn-v btn-sm" onclick="abrirMEquipo()">+ Equipo</button></div>
+        <div id="listaEq"></div>
+      </div>
+    </div>
+
+    <!-- CALENDARIO -->
+    <div id="scalendario" class="asec">
+      <div class="acard">
+        <div class="acard-hdr">
+          <h2>Calendario</h2>
+          <div class="acard-btns">
+            <button class="btn btn-g btn-sm" onclick="compartirCal()">📤</button>
+            <button class="btn btn-v btn-sm" onclick="abrirMPartido()">+ Partido</button>
+          </div>
+        </div>
+        <div id="listaPt"></div>
+      </div>
+    </div>
+
+    <!-- TABLA -->
+    <div id="stabla" class="asec">
+      <div class="acard">
+        <div class="acard-hdr"><h2>Tabla de Posiciones</h2><button class="btn btn-g btn-sm" onclick="compartirTabla()">📤 Compartir</button></div>
+        <div class="twrap">
+          <table class="ttbl">
+            <thead><tr><th>#</th><th>Equipo</th><th>Pts</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DG</th></tr></thead>
+            <tbody id="cTabla"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOLEADORES -->
+    <div id="sgoles" class="asec">
+      <div class="acard">
+        <div class="acard-hdr"><h2>Goleadores</h2><span class="ptag">⭐ PRO</span></div>
+        <div id="listaGol"></div>
+      </div>
+      <div class="acard">
+        <div class="acard-hdr"><h2>Registrar Gol</h2></div>
+        <div class="fg"><label>Partido</label><select id="selPGol"></select></div>
+        <div class="fg"><label>Jugador *</label><input type="text" id="inpJugGol" placeholder="Nombre del jugador"></div>
+        <div class="fg"><label>Equipo</label><select id="selEqGol"></select></div>
+        <div class="fg"><label>Tipo</label>
+          <select id="selTGol">
+            <option value="NORMAL">⚽ Normal</option>
+            <option value="PENAL">🎯 Penal</option>
+            <option value="AUTOGOL">🤦 Autogol</option>
+          </select>
+        </div>
+        <div class="fg"><label>Minuto (opcional)</label><input type="number" id="inpMinGol" placeholder="45" min="1" max="120"></div>
+        <button class="btn btn-v" style="width:100%;padding:12px" onclick="registrarGol()">⚽ Registrar Gol</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div id="sstats" class="asec">
+      <div class="acard">
+        <div class="acard-hdr"><h2>Estadísticas Generales</h2><span class="ptag">⭐ PRO</span></div>
+        <div class="sgrid" id="tarjStats"></div>
+      </div>
+      <div class="acard">
+        <div class="acard-hdr"><h2>Por Equipo</h2></div>
+        <div class="twrap">
+          <table class="ttbl">
+            <thead><tr><th style="text-align:left">Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DG</th><th>Pts</th></tr></thead>
+            <tbody id="tablaEqStats"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="acard">
+        <div class="acard-hdr"><h2>Top Goleadores</h2></div>
+        <div id="statsGol"></div>
+      </div>
+    </div>
+
+  </div><!-- /acont -->
+
+  <button class="fab" onclick="abrirMPartido()" title="Nuevo partido">+</button>
+
+  <nav class="bnav">
+    <button class="bbt on"  onclick="atab('sinicio',this);syncBnav(0)"><span class="ico">🏠</span>Inicio</button>
+    <button class="bbt"     onclick="atab('sequipos',this);syncBnav(1)"><span class="ico">👥</span>Equipos</button>
+    <button class="bbt"     onclick="atab('scalendario',this);syncBnav(2)"><span class="ico">📅</span>Partidos</button>
+    <button class="bbt"     onclick="atab('stabla',this);syncBnav(3)"><span class="ico">🏆</span>Tabla</button>
+    <button class="bbt"     onclick="atab('sstats',this);syncBnav(4)"><span class="ico">📊</span>Stats</button>
+  </nav>
+</div>
+
+<!-- ═══ MODALES ═══ -->
+<div id="mTorneo" class="amodal">
+  <div class="amodal-box">
+    <div class="amodal-hdr"><h3>✏️ Configurar Torneo</h3><button class="xcerrar" onclick="cerrarM('mTorneo')">×</button></div>
+    <div class="fg"><label>Nombre del Torneo</label><input type="text" id="inpNomT" placeholder="Liga Amateur 2026"></div>
+    <div class="fg"><label>Temporada</label><input type="text" id="inpTempT" placeholder="2026"></div>
+    <button class="btn btn-v" style="width:100%;padding:12px" onclick="guardarTorneo()">💾 Guardar</button>
+  </div>
+</div>
+
+<div id="mEquipo" class="amodal">
+  <div class="amodal-box">
+    <div class="amodal-hdr"><h3>👥 <span id="mEqTit">Nuevo Equipo</span></h3><button class="xcerrar" onclick="cerrarM('mEquipo')">×</button></div>
+    <input type="hidden" id="editEqId">
+    <div class="fg"><label>Nombre *</label><input type="text" id="inpNomEq" placeholder="Deportivo FC"></div>
+    <div class="fg"><label>Elige Emoji</label><div class="egrid" id="emojiGrid"></div></div>
+    <div class="fg"><label>Emoji seleccionado</label><input type="text" id="inpIcoEq" placeholder="⚽" maxlength="2"></div>
+    <button class="btn btn-v" style="width:100%;padding:12px" onclick="guardarEquipo()">✅ Guardar</button>
+  </div>
+</div>
+
+<div id="mPartido" class="amodal">
+  <div class="amodal-box">
+    <div class="amodal-hdr"><h3>📅 Nuevo Partido</h3><button class="xcerrar" onclick="cerrarM('mPartido')">×</button></div>
+    <div class="fg"><label>Equipo Local *</label><select id="selLoc"></select></div>
+    <div class="fg"><label>Equipo Visitante *</label><select id="selVis"></select></div>
+    <div class="fg"><label>Fecha y Hora *</label><input type="datetime-local" id="inpFecP"></div>
+    <div class="fg"><label>Estadio</label><input type="text" id="inpEst" placeholder="Estadio Municipal"></div>
+    <div class="fg"><label>Jornada</label><input type="number" id="inpJor" placeholder="1" min="1"></div>
+    <button class="btn btn-v" style="width:100%;padding:12px" onclick="crearPartido()">✅ Crear Partido</button>
+  </div>
+</div>
+
+<div id="mResultado" class="amodal">
+  <div class="amodal-box">
+    <div class="amodal-hdr"><h3 id="tRes">Resultado</h3><button class="xcerrar" onclick="cerrarM('mResultado')">×</button></div>
+    <input type="hidden" id="idPRes">
+    <div class="sinput">
+      <div class="sside"><label id="lblLoc">Local</label><input type="number" id="gLocal" min="0" max="99" value="0"></div>
+      <div class="svs">—</div>
+      <div class="sside"><label id="lblVis">Visitante</label><input type="number" id="gVis" min="0" max="99" value="0"></div>
+    </div>
+    <button class="btn btn-v" style="width:100%;padding:12px" onclick="guardarResultado()">💾 Guardar Resultado</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════
+   VISTA (landing ↔ app)
+══════════════════════════════════ */
+function mostrarApp(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('app').style.display='flex';
+  renderAll();
+}
+function mostrarLanding(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('landing').style.display='flex';
+}
+
+/* ══════════════════════════════════
+   STORAGE
+══════════════════════════════════ */
+const gs=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const ss=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+/* ══════════════════════════════════
+   ESTADO
+══════════════════════════════════ */
+let torneo  =gs('lm3_t',{nombre:'Mi Liga 2026',temporada:'2026'});
+let equipos =gs('lm3_e',[]);
+let partidos=gs('lm3_p',[]);
+let goles   =gs('lm3_g',[]);
+let nE=gs('lm3_nE',1),nP=gs('lm3_nP',1),nG=gs('lm3_nG',1);
+const eid=()=>{const i=nE++;ss('lm3_nE',nE);return i};
+const pid=()=>{const i=nP++;ss('lm3_nP',nP);return i};
+const gid=()=>{const i=nG++;ss('lm3_nG',nG);return i};
+const saveE=()=>ss('lm3_e',equipos);
+const saveP=()=>ss('lm3_p',partidos);
+const saveG=()=>ss('lm3_g',goles);
+const busE=id=>equipos.find(e=>e.id===id);
+const busP=id=>partidos.find(p=>p.id===id);
+const sv=()=>({j:0,g:0,e:0,p:0,gf:0,gc:0,pts:0});
+
+const EMOJIS=['⚽','🔵','🔴','🟡','🟢','⚪','🟠','🟣','🦁','🐯','🦅','🐺','🦊','🐉','⚡','🔥','💎','🌟','🏆','👑','🎯','🏅'];
+
+/* DEMO DATA */
+if(!equipos.length){
+  [['Barcelona FC','🔵'],['Real Madrid','⚪'],['Atlético','🔴'],['Valencia CF','🟠'],['Sevilla','🟡'],['Betis','🟢']]
+    .forEach(([n,i])=>equipos.push({id:eid(),nombre:n,icono:i,stats:sv()}));
+  saveE();
+  const now=new Date();
+  const fe=(d,h)=>{const f=new Date(now);f.setDate(f.getDate()+d);f.setHours(h,0,0);return f.toISOString().slice(0,16)};
+  [{l:1,v:2,gl:2,gv:1,s:'FINALIZADO',j:1,st:'Camp Nou',d:-7},
+   {l:3,v:4,gl:1,gv:1,s:'FINALIZADO',j:1,st:'Wanda Metropolitano',d:-7},
+   {l:5,v:6,gl:3,gv:0,s:'FINALIZADO',j:1,st:'Benito Villamarín',d:-7},
+   {l:2,v:3,gl:null,gv:null,s:'PENDIENTE',j:2,st:'Bernabéu',d:3},
+   {l:4,v:1,gl:null,gv:null,s:'PENDIENTE',j:2,st:'Mestalla',d:4},
+   {l:6,v:5,gl:null,gv:null,s:'PENDIENTE',j:2,st:'Sánchez-Pizjuán',d:5}]
+  .forEach(pd=>partidos.push({id:pid(),local:pd.l,visitante:pd.v,golesLocal:pd.gl,golesVisit:pd.gv,estado:pd.s,jornada:pd.j,fecha:fe(pd.d,20),estadio:pd.st}));
+  saveP();
+  partidos.filter(p=>p.estado==='FINALIZADO').forEach(p=>apSt(p,false));
+  saveE();
+  [{pi:1,ju:'Lewandowski',ei:1,t:'NORMAL',m:23},{pi:1,ju:'Lewandowski',ei:1,t:'PENAL',m:67},
+   {pi:1,ju:'Vinicius Jr',ei:2,t:'NORMAL',m:45},{pi:2,ju:'Griezmann',ei:3,t:'NORMAL',m:31},
+   {pi:2,ju:'Guedes',ei:4,t:'NORMAL',m:55},{pi:3,ju:'Fekir',ei:5,t:'NORMAL',m:12},
+   {pi:3,ju:'Fekir',ei:5,t:'NORMAL',m:38},{pi:3,ju:'W. José',ei:5,t:'NORMAL',m:71}]
+  .forEach(g=>goles.push({id:gid(),partidoId:g.pi,jugador:g.ju,equipoId:g.ei,tipo:g.t,minuto:g.m}));
+  saveG();
+}
+
+/* ══════════════════════════════════
+   STATS HELPERS
+══════════════════════════════════ */
+function apSt(p,save=true){
+  const l=busE(p.local),v=busE(p.visitante);if(!l||!v)return;
+  l.stats.j++;v.stats.j++;
+  l.stats.gf+=p.golesLocal;l.stats.gc+=p.golesVisit;
+  v.stats.gf+=p.golesVisit;v.stats.gc+=p.golesLocal;
+  if(p.golesLocal>p.golesVisit){l.stats.g++;l.stats.pts+=3;v.stats.p++}
+  else if(p.golesLocal<p.golesVisit){v.stats.g++;v.stats.pts+=3;l.stats.p++}
+  else{l.stats.e++;l.stats.pts++;v.stats.e++;v.stats.pts++}
+  if(save)saveE();
+}
+function rvSt(p){
+  const l=busE(p.local),v=busE(p.visitante);if(!l||!v)return;
+  l.stats.j--;v.stats.j--;
+  l.stats.gf-=p.golesLocal;l.stats.gc-=p.golesVisit;
+  v.stats.gf-=p.golesVisit;v.stats.gc-=p.golesLocal;
+  if(p.golesLocal>p.golesVisit){l.stats.g--;l.stats.pts-=3;v.stats.p--}
+  else if(p.golesLocal<p.golesVisit){v.stats.g--;v.stats.pts-=3;l.stats.p--}
+  else{l.stats.e--;l.stats.pts--;v.stats.e--;v.stats.pts--}
+}
+
+/* ══════════════════════════════════
+   NAV
+══════════════════════════════════ */
+function atab(id,el){
+  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(el&&el.classList.contains('atab'))el.classList.add('on');
+  renderAll();
+}
+function syncBnav(i){
+  const bs=document.querySelectorAll('.bbt');
+  bs.forEach((b,j)=>b.classList.toggle('on',j===i));
+  const ts=document.querySelectorAll('.atab');
+  [0,1,2,3,5].forEach((ti,j)=>ts[ti]?.classList.toggle('on',j===i));
+}
+
+/* ══════════════════════════════════
+   MODALES
+══════════════════════════════════ */
+function abrirM(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden'}
+function cerrarM(id){document.getElementById(id).classList.remove('on');document.body.style.overflow=''}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.amodal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)cerrarM(m.id)}));
+  buildEmoji();
+  document.getElementById('inpNomT').value=torneo.nombre;
+  document.getElementById('inpTempT').value=torneo.temporada;
+});
+
+/* ══════════════════════════════════
+   TORNEO
+══════════════════════════════════ */
+function guardarTorneo(){
+  const n=document.getElementById('inpNomT').value.trim();
+  if(n)torneo.nombre=n;
+  torneo.temporada=document.getElementById('inpTempT').value||'2026';
+  ss('lm3_t',torneo);renderHdr();cerrarM('mTorneo');toast2('✅ Torneo actualizado');
+}
+function renderHdr(){
+  document.getElementById('hdrSub').textContent=torneo.nombre+' · '+torneo.temporada;
+  document.getElementById('wTitle').textContent=torneo.nombre.toUpperCase();
+}
+
+/* ══════════════════════════════════
+   EMOJI
+══════════════════════════════════ */
+function buildEmoji(){
+  const g=document.getElementById('emojiGrid');
+  if(!g)return;
+  g.innerHTML=EMOJIS.map(e=>`<button type="button" onclick="selEmo('${e}')">${e}</button>`).join('');
+}
+function selEmo(e){document.getElementById('inpIcoEq').value=e}
+
+/* ══════════════════════════════════
+   EQUIPOS
+══════════════════════════════════ */
+function abrirMEquipo(id){
+  document.getElementById('editEqId').value=id||'';
+  const eq=id?busE(id):null;
+  document.getElementById('mEqTit').textContent=eq?'Editar Equipo':'Nuevo Equipo';
+  document.getElementById('inpNomEq').value=eq?eq.nombre:'';
+  document.getElementById('inpIcoEq').value=eq?eq.icono:'⚽';
+  abrirM('mEquipo');
+}
+function guardarEquipo(){
+  const n=document.getElementById('inpNomEq').value.trim();
+  if(!n){toast2('⚠️ El nombre es obligatorio','e');return}
+  const ico=document.getElementById('inpIcoEq').value||'⚽';
+  const editId=parseInt(document.getElementById('editEqId').value)||null;
+  if(editId){const eq=busE(editId);if(eq){eq.nombre=n;eq.icono=ico}}
+  else equipos.push({id:eid(),nombre:n,icono:ico,stats:sv()});
+  saveE();renderAll();fillSelects();cerrarM('mEquipo');
+  toast2(editId?'✅ Equipo actualizado':'✅ Equipo creado');
+}
+function eliminarEquipo(id){
+  if(!confirm('¿Eliminar este equipo y sus partidos/goles?'))return;
+  partidos.filter(p=>(p.local===id||p.visitante===id)&&p.estado==='FINALIZADO').forEach(p=>rvSt(p));
+  partidos=partidos.filter(p=>p.local!==id&&p.visitante!==id);
+  goles=goles.filter(g=>g.equipoId!==id);
+  equipos=equipos.filter(e=>e.id!==id);
+  saveE();saveP();saveG();renderAll();fillSelects();toast2('🗑️ Equipo eliminado');
+}
+
+/* ══════════════════════════════════
+   PARTIDOS
+══════════════════════════════════ */
+function abrirMPartido(){
+  if(equipos.length<2){toast2('⚠️ Necesitas al menos 2 equipos','e');return}
+  fillSelects();
+  ['inpFecP','inpEst','inpJor'].forEach(id=>document.getElementById(id).value='');
+  abrirM('mPartido');
+}
+function crearPartido(){
+  const l=parseInt(document.getElementById('selLoc').value);
+  const v=parseInt(document.getElementById('selVis').value);
+  const f=document.getElementById('inpFecP').value;
+  const est=document.getElementById('inpEst').value.trim();
+  const j=parseInt(document.getElementById('inpJor').value)||null;
+  if(!f){toast2('⚠️ La fecha es obligatoria','e');return}
+  if(l===v){toast2('⚠️ Los equipos deben ser distintos','e');return}
+  partidos.push({id:pid(),local:l,visitante:v,fecha:f,estadio:est,jornada:j,golesLocal:null,golesVisit:null,estado:'PENDIENTE'});
+  saveP();renderAll();cerrarM('mPartido');toast2('📅 Partido creado');
+}
+function abrirRes(id){
+  const p=busP(id);if(!p)return;
+  const l=busE(p.local),v=busE(p.visitante);
+  document.getElementById('idPRes').value=id;
+  document.getElementById('tRes').textContent=(l?.nombre||'?')+' vs '+(v?.nombre||'?');
+  document.getElementById('lblLoc').textContent=l?.nombre||'Local';
+  document.getElementById('lblVis').textContent=v?.nombre||'Visitante';
+  document.getElementById('gLocal').value=p.golesLocal??0;
+  document.getElementById('gVis').value=p.golesVisit??0;
+  abrirM('mResultado');
+}
+function guardarResultado(){
+  const id=parseInt(document.getElementById('idPRes').value);
+  const gl=parseInt(document.getElementById('gLocal').value);
+  const gv=parseInt(document.getElementById('gVis').value);
+  if(isNaN(gl)||isNaN(gv)||gl<0||gv<0){toast2('⚠️ Números inválidos','e');return}
+  const p=busP(id);if(!p)return;
+  if(p.estado==='FINALIZADO')rvSt(p);
+  p.golesLocal=gl;p.golesVisit=gv;p.estado='FINALIZADO';
+  apSt(p,true);saveP();renderAll();cerrarM('mResultado');toast2('✅ Resultado guardado');
+}
+function eliminarPartido(id){
+  if(!confirm('¿Eliminar este partido?'))return;
+  const p=busP(id);
+  if(p?.estado==='FINALIZADO')rvSt(p);
+  goles=goles.filter(g=>g.partidoId!==id);
+  partidos=partidos.filter(m=>m.id!==id);
+  saveP();saveE();saveG();renderAll();toast2('🗑️ Partido eliminado');
+}
+
+/* ══════════════════════════════════
+   GOLES
+══════════════════════════════════ */
+function registrarGol(){
+  const piG=parseInt(document.getElementById('selPGol').value);
+  const ju=document.getElementById('inpJugGol').value.trim();
+  const ei=parseInt(document.getElementById('selEqGol').value);
+  const ti=document.getElementById('selTGol').value;
+  const mi=parseInt(document.getElementById('inpMinGol').value)||null;
+  if(!ju){toast2('⚠️ Ingresa el nombre del jugador','e');return}
+  goles.push({id:gid(),partidoId:piG,jugador:ju,equipoId:ei,tipo:ti,minuto:mi});
+  saveG();renderGoles();renderStatsGol();
+  document.getElementById('inpJugGol').value='';
+  document.getElementById('inpMinGol').value='';
+  toast2('⚽ Gol registrado');
+}
+function eliminarGol(id){
+  goles=goles.filter(g=>g.id!==id);
+  saveG();renderGoles();renderStatsGol();toast2('🗑️ Gol eliminado');
+}
+function rankGol(){
+  const m={};
+  goles.filter(g=>g.tipo!=='AUTOGOL').forEach(g=>{
+    const k=g.jugador+'__'+g.equipoId;
+    if(!m[k])m[k]={jugador:g.jugador,equipoId:g.equipoId,goles:0,ids:[]};
+    m[k].goles++;m[k].ids.push(g.id);
+  });
+  return Object.values(m).sort((a,b)=>b.goles-a.goles);
+}
+
+/* ══════════════════════════════════
+   COMPARTIR
+══════════════════════════════════ */
+function compartirCal(){
+  const txt=[...partidos].sort((a,b)=>new Date(a.fecha)-new Date(b.fecha)).map(p=>{
+    const l=busE(p.local),v=busE(p.visitante);
+    const f=new Date(p.fecha).toLocaleString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return`${l?.nombre||'?'} vs ${v?.nombre||'?'} | ${f} | ${p.golesLocal!==null?p.golesLocal+'-'+p.golesVisit:'Por jugar'}`;
+  }).join('\n');
+  compartir(`📅 ${torneo.nombre}\n\n${txt}`);
+}
+function compartirTabla(){
+  const txt=tablaOrd().map((e,i)=>{const dg=e.stats.gf-e.stats.gc;return`${i+1}. ${e.nombre} — ${e.stats.pts} Pts | DG:${dg>=0?'+'+dg:dg}`}).join('\n');
+  compartir(`🏆 ${torneo.nombre} — Tabla\n\n${txt}`);
+}
+function compartirPt(id){
+  const p=busP(id);if(!p)return;
+  const l=busE(p.local),v=busE(p.visitante);
+  const f=new Date(p.fecha).toLocaleString('es-ES',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
+  compartir(`${torneo.nombre}\n${l?.nombre||'?'} vs ${v?.nombre||'?'}\n${p.golesLocal!==null?`⚽ ${p.golesLocal}-${p.golesVisit}`:'📅 '+f}${p.estadio?'\n📍 '+p.estadio:''}`);
+}
+function compartir(txt){
+  if(navigator.share)navigator.share({title:torneo.nombre,text:txt}).catch(()=>{});
+  else navigator.clipboard.writeText(txt).then(()=>toast2('📋 Copiado al portapapeles')).catch(()=>prompt('Copia:',txt));
+}
+
+/* ══════════════════════════════════
+   FILL SELECTS
+══════════════════════════════════ */
+function fillSelects(){
+  const opts=equipos.map(e=>`<option value="${e.id}">${e.icono} ${e.nombre}</option>`).join('');
+  ['selLoc','selVis','selEqGol'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts});
+  const pOpts=partidos.map(p=>{
+    const l=busE(p.local),v=busE(p.visitante);
+    const f=new Date(p.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+    return`<option value="${p.id}">${l?.nombre||'?'} vs ${v?.nombre||'?'} (${f})</option>`;
+  }).join('');
+  const spg=document.getElementById('selPGol');
+  if(spg)spg.innerHTML=pOpts||'<option value="">Sin partidos</option>';
+}
+
+/* ══════════════════════════════════
+   RENDERS
+══════════════════════════════════ */
+function renderAll(){renderHdr();renderEq();renderCal();renderTabla();renderGoles();renderStats();renderInicio();fillSelects()}
+
+function renderInicio(){
+  const jug=partidos.filter(p=>p.estado==='FINALIZADO').length;
+  const pend=partidos.filter(p=>p.estado!=='FINALIZADO').length;
+  const ng=goles.length;
+  const top=tablaOrd()[0];
+  document.getElementById('rInicio').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px">
+      <div class="scard"><div class="sv">${equipos.length}</div><div class="sl">Equipos</div></div>
+      <div class="scard"><div class="sv">${jug}</div><div class="sl">Jugados</div></div>
+      <div class="scard"><div class="sv">${pend}</div><div class="sl">Pendientes</div></div>
+      <div class="scard"><div class="sv">${ng}</div><div class="sl">Goles</div></div>
+    </div>
+    ${top?`<div class="acard" style="background:rgba(0,230,118,.05);border-color:rgba(0,230,118,.18);margin-bottom:13px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:2em">${top.icono}</div>
+        <div>
+          <div style="font-size:.7em;color:var(--verde);text-transform:uppercase;letter-spacing:.06em;font-weight:700">🏆 Líder</div>
+          <div style="font-weight:700;font-size:1em">${top.nombre}</div>
+          <div style="color:var(--txt2);font-size:.78em">${top.stats.pts} pts · ${top.stats.j} PJ · DG ${top.stats.gf-top.stats.gc>=0?'+':''}${top.stats.gf-top.stats.gc}</div>
+        </div>
+      </div>
+    </div>`:''}
+    ${partidos.filter(p=>p.estado==='PENDIENTE').slice(0,2).map(p=>{
+      const l=busE(p.local),v=busE(p.visitante);
+      const f=new Date(p.fecha).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
+      return`<div class="mcard" style="margin-bottom:8px">
+        <div class="mmeta"><span>Próximo · ${f}</span><span class="badge b-pend">Pendiente</span></div>
+        <div class="mteams">
+          <div class="tside"><div class="temo">${l?.icono||'?'}</div><div class="tname">${l?.nombre||'?'}</div></div>
+          <div class="mscore">- –  -</div>
+          <div class="tside"><div class="temo">${v?.icono||'?'}</div><div class="tname">${v?.nombre||'?'}</div></div>
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function renderEq(){
+  const c=document.getElementById('listaEq');if(!c)return;
+  if(!equipos.length){c.innerHTML=`<div class="empty"><div class="empty-i">👥</div><h3>Sin equipos</h3><p>Pulsa "+ Equipo" para agregar el primero</p></div>`;return}
+  c.innerHTML=equipos.map(e=>`
+    <div class="ecard">
+      <div class="eleft">
+        <div class="eemo">${e.icono}</div>
+        <div><div class="ename">${e.nombre}</div><div class="estats">${e.stats.j} PJ · ${e.stats.g}G ${e.stats.e}E ${e.stats.p}P · ${e.stats.pts} Pts</div></div>
+      </div>
+      <div class="eacts">
+        <button class="btn btn-g btn-sm" onclick="abrirMEquipo(${e.id})">✏️</button>
+        <button class="btn btn-r btn-sm" onclick="eliminarEquipo(${e.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderCal(){
+  const c=document.getElementById('listaPt');if(!c)return;
+  if(!partidos.length){c.innerHTML=`<div class="empty"><div class="empty-i">📅</div><h3>Sin partidos</h3><p>Pulsa "+" para programar el primero</p></div>`;return}
+  const ord=[...partidos].sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  const pend=ord.filter(p=>p.estado!=='FINALIZADO');
+  const jug=ord.filter(p=>p.estado==='FINALIZADO');
+  const grp=(lista,titulo)=>{
+    if(!lista.length)return'';
+    const pj={};lista.forEach(p=>{const j=p.jornada||0;(pj[j]=pj[j]||[]).push(p)});
+    let h=`<div class="jlabel">${titulo}</div>`;
+    Object.keys(pj).sort((a,b)=>+a-+b).forEach(j=>{
+      if(+j>0)h+=`<div style="font-size:.71em;color:var(--txt2);text-transform:uppercase;letter-spacing:.06em;margin:9px 0 5px;font-weight:600">Jornada ${j}</div>`;
+      h+=`<div class="mlist">${pj[j].map(tarjPt).join('')}</div>`;
+    });
+    return h;
+  };
+  c.innerHTML=grp(pend,'📅 Próximos')+grp(jug,'✅ Jugados');
+}
+
+function tarjPt(p){
+  const l=busE(p.local),v=busE(p.visitante);if(!l||!v)return'';
+  const f=new Date(p.fecha).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  const marc=p.golesLocal!==null?`${p.golesLocal} – ${p.golesVisit}`:'- – -';
+  const bmap={PENDIENTE:'<span class="badge b-pend">Programado</span>',FINALIZADO:'<span class="badge b-fin">Finalizado</span>',EN_VIVO:'<span class="badge b-live">En Vivo</span>'};
+  const gp=goles.filter(g=>g.partidoId===p.id&&g.tipo!=='AUTOGOL');
+  const gs2=gp.length?`<div class="mgoles-strip">${gp.map(g=>`<span>${busE(g.equipoId)?.icono||'⚽'} ${g.jugador}${g.minuto?` ${g.minuto}'`:''}</span>`).join('')}</div>`:'';
+  return`<div class="mcard${p.estado==='FINALIZADO'?' jugado':''}">
+    <div class="mmeta"><span>${f}${p.estadio?' · '+p.estadio:''}</span>${bmap[p.estado]||''}</div>
+    <div class="mteams">
+      <div class="tside"><div class="temo">${l.icono}</div><div class="tname">${l.nombre}</div></div>
+      <div class="mscore">${marc}</div>
+      <div class="tside"><div class="temo">${v.icono}</div><div class="tname">${v.nombre}</div></div>
+    </div>
+    ${gs2}
+    <div class="macts">
+      <button class="btn btn-v btn-sm" onclick="abrirRes(${p.id})">${p.estado==='FINALIZADO'?'✏️ Editar':'⚽ Resultado'}</button>
+      <button class="btn btn-r btn-sm" onclick="eliminarPartido(${p.id})">🗑️</button>
+      <button class="btn btn-g btn-sm" onclick="compartirPt(${p.id})">📤</button>
+    </div>
+  </div>`;
+}
+
+function tablaOrd(){
+  return[...equipos].sort((a,b)=>{
+    const d=b.stats.pts-a.stats.pts;if(d)return d;
+    const dga=a.stats.gf-a.stats.gc,dgb=b.stats.gf-b.stats.gc;
+    const d2=dgb-dga;if(d2)return d2;
+    return b.stats.gf-a.stats.gf;
+  });
+}
+function renderTabla(){
+  const ord=tablaOrd();
+  const pc=['','pos1','pos2','pos3'];
+  document.getElementById('cTabla').innerHTML=ord.map((e,i)=>{
+    const dg=e.stats.gf-e.stats.gc;const cl=dg>0?'dgp':dg<0?'dgn':'dg0';
+    return`<tr>
+      <td><span class="posn ${pc[i+1]||''}">${i+1}</span></td>
+      <td>${e.icono} ${e.nombre}</td>
+      <td><span class="ptsb">${e.stats.pts}</span></td>
+      <td>${e.stats.j}</td><td>${e.stats.g}</td><td>${e.stats.e}</td><td>${e.stats.p}</td>
+      <td>${e.stats.gf}</td><td>${e.stats.gc}</td>
+      <td class="${cl}">${dg>=0?'+'+dg:dg}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderGoles(){
+  const c=document.getElementById('listaGol');if(!c)return;
+  const rk=rankGol();
+  if(!rk.length){c.innerHTML=`<div class="empty"><div class="empty-i">⚽</div><h3>Sin goles registrados</h3><p>Usa el formulario de abajo para registrar</p></div>`;return}
+  const med=['🥇','🥈','🥉'];
+  c.innerHTML=rk.slice(0,10).map((g,i)=>{
+    const eq=busE(g.equipoId);
+    const gd=goles.filter(gl=>gl.jugador===g.jugador&&gl.equipoId===g.equipoId);
+    const pens=gd.filter(gl=>gl.tipo==='PENAL').length;
+    return`<div class="grow">
+      <div class="gpos">${med[i]||i+1}</div>
+      <div class="ginfo">
+        <div class="gnom">${g.jugador}</div>
+        <div class="geq">${eq?.icono||''} ${eq?.nombre||'?'}${pens?` · 🎯 ${pens} pen.`:''}</div>
+        <div style="font-size:.68em;color:var(--txt2);margin-top:2px;display:flex;flex-wrap:wrap;gap:3px">
+          ${gd.filter(gl=>gl.minuto).map(gl=>`<span style="background:rgba(255,255,255,.05);padding:1px 6px;border-radius:10px">${gl.minuto}'</span>`).join('')}
+        </div>
+      </div>
+      <div class="gcnt">${g.goles}<span>goles</span></div>
+      <button class="btn btn-r btn-sm" onclick="eliminarGol(${g.ids[g.ids.length-1]})" title="Quitar último gol">-1</button>
+    </div>`;
+  }).join('');
+}
+
+function renderStatsGol(){
+  const rk=rankGol();const c=document.getElementById('statsGol');if(!c)return;
+  if(!rk.length){c.innerHTML='<p style="color:var(--txt2);font-size:.86em;padding:6px 0">Sin datos de goles</p>';return}
+  const mx=rk[0].goles;
+  c.innerHTML=rk.slice(0,5).map(g=>{
+    const eq=busE(g.equipoId);const pct=(g.goles/mx)*100;
+    return`<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:.82em;margin-bottom:3px">
+        <span>${eq?.icono||''} ${g.jugador}</span>
+        <strong style="color:var(--verde)">${g.goles} ⚽</strong>
+      </div>
+      <div style="background:rgba(255,255,255,.07);border-radius:100px;height:5px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--verde);border-radius:100px;transition:width .5s ease"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderStats(){
+  const jug=partidos.filter(p=>p.estado==='FINALIZADO').length;
+  const pend=partidos.filter(p=>p.estado!=='FINALIZADO').length;
+  const tg=partidos.reduce((s,p)=>s+(p.golesLocal||0)+(p.golesVisit||0),0);
+  const prom=jug>0?(tg/jug).toFixed(1):'0.0';
+  const ts=document.getElementById('tarjStats');if(ts)ts.innerHTML=
+    [{v:equipos.length,l:'Equipos'},{v:partidos.length,l:'Partidos'},{v:jug,l:'Jugados'},{v:pend,l:'Pendientes'},{v:tg,l:'Goles'},{v:prom,l:'Goles/Partido'}]
+    .map(s=>`<div class="scard"><div class="sv">${s.v}</div><div class="sl">${s.l}</div></div>`).join('');
+  const te=document.getElementById('tablaEqStats');if(te)te.innerHTML=tablaOrd().map(e=>{
+    const dg=e.stats.gf-e.stats.gc;const cl=dg>0?'dgp':dg<0?'dgn':'dg0';
+    return`<tr><td style="text-align:left">${e.icono} ${e.nombre}</td><td>${e.stats.j}</td><td>${e.stats.g}</td><td>${e.stats.e}</td><td>${e.stats.p}</td><td>${e.stats.gf}</td><td>${e.stats.gc}</td><td class="${cl}">${dg>=0?'+'+dg:dg}</td><td><strong style="color:var(--verde)">${e.stats.pts}</strong></td></tr>`;
+  }).join('');
+  renderStatsGol();
+}
+
+/* ══════════════════════════════════
+   TOAST
+══════════════════════════════════ */
+let _tt;
+function toast2(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className=type==='e'?'err show':'show';
+  clearTimeout(_tt);_tt=setTimeout(()=>el.className='',2600);
+}
+</script>
 </body>
 </html>
